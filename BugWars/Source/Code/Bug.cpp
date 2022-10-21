@@ -10,26 +10,24 @@ void Bug::OnUpdate(float dt)
 
 BugBase* Bug::FindBugToEat() const
 {
-	Bug* target = nullptr;
+	BugBase* target = nullptr;
 	float min_dist = std::numeric_limits<float>::max();
+
 	for (auto object : g_Game->objects)
 	{
-		if (auto bug = dynamic_cast<Bug*>(object))
+		if (object->GetRTTI() == Bug::s_RTTI)
 		{
-			if (bug == this)
+			if (object == this)
 				continue;
 
-			if (bug->disabled)
-				continue;
-
-			if (bug->id > id)
+			if (object->id > id)
 				continue; // Can't eat that
 
-			float dist = position.Distance(bug->position);
+			float dist = position.Distance2(object->position);
 			if (dist < min_dist)
 			{
 				min_dist = dist;
-				target = bug;
+				target = static_cast<BugBase*>(object);
 			}
 		}
 	}
@@ -37,16 +35,8 @@ BugBase* Bug::FindBugToEat() const
 	return target;
 }
 
-void Bug::OnEat(BugBase& first, BugBase& second)
+void Bug::OnEat(BugBase& bug, BugBase& target)
 {
-	if (first.id > second.id)
-	{
-		second.disabled = true;
-		second.visible = false;
-	}
-	else
-	{
-		first.disabled = true;
-		first.visible = false;
-	}
+	target.disabled = true;
+	target.visible = false;
 }

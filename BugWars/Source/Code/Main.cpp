@@ -11,8 +11,8 @@ int main(int argc, const char* argv[])
 		Game game;
 		Framework framework;
 
-		if (argc > 1)
-			if (!strcmp(argv[1], "-lock60fps"))
+		//if (argc > 1)
+		//	if (!strcmp(argv[1], "-lock60fps"))
 				framework.lock60fps = true;
 
 		framework.Run(game);
